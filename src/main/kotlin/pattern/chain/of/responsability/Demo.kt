@@ -1,5 +1,9 @@
 package pattern.chain.of.responsability
 
+import pattern.mediator.Command
+import pattern.mediator.Mediator
+import pattern.mediator.MediatorManager
+import pattern.mediator.RegisterLog
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -36,11 +40,21 @@ class Demo {
             linkWith(UserExistsMiddleware(server))
             linkWith(RoleCheckMiddleware())
         }
+        val mediator = buildMediator {
+            linkCommand(RegisterLog())
+            linkCommand(RegisterLog())
+        }
+        middleware.setMediator(mediator)
 
         server.setMiddleWare(middleware)
 
     }
 
+    private fun buildMediator(mediatorAction: Mediator.() -> Unit) : Mediator {
+       val mediatorManager = MediatorManager()
+        mediatorManager.mediatorAction()
+        return mediatorManager
+    }
     private fun buildChain(middlewareAction: Middleware.() -> Unit): Middleware {
         val middlewareChain = ThrottlingMiddleware(2)
         middlewareChain.middlewareAction()

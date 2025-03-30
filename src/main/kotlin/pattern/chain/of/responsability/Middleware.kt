@@ -1,10 +1,16 @@
 package pattern.chain.of.responsability
 
+import pattern.mediator.Mediator
+
 abstract class Middleware() {
     var next: Middleware? = null
+    protected lateinit var mediator: Mediator
     fun linkWith(next: Middleware): Middleware{
         this.next = next
         return next
+    }
+    fun setMediator(mediator: Mediator){
+        this.mediator = mediator
     }
 
     abstract fun check(email: String, password: String): Boolean

@@ -10,6 +10,7 @@ class UserExistsMiddleware(val server: Server): Middleware() {
             println("Wrong password")
             return false
         }
+        mediator.notify("teste userExists", "RegisterLog")
         return checkNext(email, password)
     }
 }
