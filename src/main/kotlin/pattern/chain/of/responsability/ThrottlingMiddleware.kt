@@ -1,7 +1,9 @@
 package pattern.chain.of.responsability
 
+import pattern.mediator.Mediator
+
 class ThrottlingMiddleware(val requestPerMinute: Int,
-                           var currentTime: Long = System.currentTimeMillis()
+                           var currentTime: Long = System.currentTimeMillis(),
                            ): Middleware() {
      var request: Int = 0
 
@@ -16,6 +18,7 @@ class ThrottlingMiddleware(val requestPerMinute: Int,
             println("Request limit exceeded!")
             Thread.currentThread().stop()
         }
+        super.mediator.notify("ThrottlingMiddleware","RegisterLog")
         return checkNext(email, password)
     }
 

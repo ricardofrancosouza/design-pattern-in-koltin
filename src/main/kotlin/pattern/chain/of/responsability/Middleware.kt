@@ -9,7 +9,7 @@ abstract class Middleware() {
         this.next = next
         return next
     }
-    fun setMediator(mediator: Mediator){
+    fun defineMediator(mediator: Mediator){
         this.mediator = mediator
     }
 

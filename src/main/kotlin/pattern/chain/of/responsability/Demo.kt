@@ -1,6 +1,5 @@
 package pattern.chain.of.responsability
 
-import pattern.mediator.Command
 import pattern.mediator.Mediator
 import pattern.mediator.MediatorManager
 import pattern.mediator.RegisterLog
@@ -36,15 +35,19 @@ class Demo {
             put("user@example.com", "user_pass")
         }
 
-        val middleware = buildChain {
-            linkWith(UserExistsMiddleware(server))
-            linkWith(RoleCheckMiddleware())
-        }
         val mediator = buildMediator {
             linkCommand(RegisterLog())
             linkCommand(RegisterLog())
         }
-        middleware.setMediator(mediator)
+        val userExistsMiddleware = UserExistsMiddleware(server)
+        userExistsMiddleware.defineMediator(mediator)
+        val roleCheckMiddleware = RoleCheckMiddleware()
+        roleCheckMiddleware.defineMediator(mediator)
+        val middleware = buildChain {
+            linkWith(roleCheckMiddleware)
+            linkWith(userExistsMiddleware)
+        }
+        middleware.defineMediator(mediator)
 
         server.setMiddleWare(middleware)
 

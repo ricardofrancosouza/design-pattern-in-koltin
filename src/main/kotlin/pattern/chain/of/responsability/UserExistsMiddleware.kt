@@ -1,5 +1,7 @@
 package pattern.chain.of.responsability
 
+import pattern.mediator.Mediator
+
 class UserExistsMiddleware(val server: Server): Middleware() {
     override fun check(email: String, password: String): Boolean {
         if(!server.hasEmail(email)){
@@ -10,7 +12,7 @@ class UserExistsMiddleware(val server: Server): Middleware() {
             println("Wrong password")
             return false
         }
-        mediator.notify("teste userExists", "RegisterLog")
+        mediator.notify("UserExistsMiddleware", "RegisterLog")
         return checkNext(email, password)
     }
 }
